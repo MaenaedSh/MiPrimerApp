@@ -2,20 +2,66 @@ package com.miprimerapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.widget.TextView
+import com.miprimerapp.Extensiones.cambioTexto
+import com.miprimerapp.Extensiones.toggleVisibility
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    private var elTextoGuardado: String= " " //Se puede ocupar en cualquier bloque
 
+    private val key = "USER_KEY"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        variablesYConstantes()
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+
+
+        val elTexto= findViewById<TextView>(R.id.txtInicio)
+
+        elTexto.text = "ya Cambio"
+
+        //Otra forma
+        txtInicio.text= prefs.getString(key, "No hay nada")
+        //btnInicio.text= "MI BOTÓN CAMBIÓ"
+
+        elTextoGuardado= btnInicio.text.toString()
+
+        btnInicio.setOnClickListener {
+            //cambiarTextoBoton(btnInicio)
+            btnInicio.cambioTexto(elTextoGuardado)
+            val editor = prefs.edit()
+            editor.remove(key)
+            editor.apply()
+        }
+        btnNuevo.setOnClickListener{
+            //cambiarTextoBoton(btnNuevo)
+
+            //btnNuevo.cambioTexto(elTextoGuardado)
+            btnInicio.toggleVisibility()
+        }
+
+        //ALT + Enter: corrige errores
+
+        /*variablesYConstantes()
         tipoDeDatos()
         sentenciaIf()
         sentenciaWhen()
         arrays()
         maps()
+        loops()*/
     }
+
+    /*
+    private fun cambiarTextoBoton(myBoton: Button){
+        if (myBoton.text == elTextoGuardado){
+            myBoton.text = "Boton presionado"
+        }else{
+            myBoton.text = elTextoGuardado
+        }
+    }*/
 
     private fun variablesYConstantes (){
         //Variables
@@ -36,14 +82,14 @@ class MainActivity : AppCompatActivity() {
         val myString3= myString + myString2
 
         println(myString3)
-        Log.e(tag: "Concatenar", myString3)
+        //Log.e(tag: "Concatenar", myString3)
 
-        Log.e(tag: "Concatenar2", msg: "Esto es lo que se concatena ${myString2} seguir con esto")
+        //Log.e(tag: "Concatenar2", msg: "Esto es lo que se concatena ${myString2} seguir con esto")
 
         val myInt=1
         val myInt2=2
 
-        Log.e(tag: "Enteros ", msg: "${myInt} ${myInt2}")
+        //Log.e(tag: "Enteros ", msg: "${myInt} ${myInt2}")
 
         //Boolean
 
@@ -138,7 +184,7 @@ class MainActivity : AppCompatActivity() {
         myArray.clear()
     }
     private fun maps(){
-        var myMap: Map<String,Int>= mapOf()
+        var myMap: Map<String,Int> = mapOf()
         println(myMap)
 
         //Añadir
@@ -155,5 +201,51 @@ class MainActivity : AppCompatActivity() {
         //Eliminar
         myMap.remove("Carlos")
         println(myMap)
+    }
+
+    private fun loops(){
+        val nombre= "Carlos"
+        val apellido= "Sancho"
+        val empresa= "GeekPark"
+        val edad= "27"
+
+        val myArray= listOf(nombre, apellido, empresa, edad)
+        val myMap = mutableMapOf("Carlos" to 29, "Hugo" to 26, "Sara" to 3)
+
+        //For
+        for (myString in myArray){
+            println(myString)
+        }
+        for (myElement in myMap){
+            println(myElement)
+        }
+
+        for (myElement in myMap){
+            println("${myElement.key}-${myElement.value}")
+        }
+        for (x in 0 until 10){ //Con until se cuentade 0 a 9
+            println("${x}")
+        }
+        for (x in 0..10 step 2){
+            println(x)
+        }
+        for (x in 10 downTo 0 step 3){
+            println(x)
+        }
+
+        val myNumericArray = (0..20)
+        for (perrito in myNumericArray){
+            println(perrito)
+        }
+
+
+        //While
+        var x=0
+
+        while (x <10){
+            println(x)
+            //x++
+            x+=2
+        }
     }
 }
